@@ -6,7 +6,7 @@ public:
         for (int i = 1; i <= nums.size() + 1; i++) {
             int x = i * k;
 
-            if (s.find(x) == s.end())
+            if (!s.count(x))
                 return x;
         }
 
