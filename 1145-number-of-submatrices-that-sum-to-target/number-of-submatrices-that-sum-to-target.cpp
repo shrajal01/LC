@@ -5,37 +5,41 @@ public:
         int m = matrix.size();
         int n = matrix[0].size();
 
-        vector<vector<int>> prefix(m + 1, vector<int>(n + 1, 0));
+        int ans = 0;
 
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-
-                prefix[i][j] = matrix[i - 1][j - 1]
-                             + prefix[i - 1][j]
-                             + prefix[i][j - 1]
-                             - prefix[i - 1][j - 1];
-            }
-        }
-
-        int count = 0;
         for (int top = 0; top < m; top++) {
+
+            vector<int> colSum(n, 0);
+
             for (int bottom = top; bottom < m; bottom++) {
 
-                for (int left = 0; left < n; left++) {
-                    for (int right = left; right < n; right++) {
+                // Add current row into column sums
+                for (int col = 0; col < n; col++) {
+                    colSum[col] += matrix[bottom][col];
+                }
 
-                        int sum = prefix[bottom + 1][right + 1]
-                                - prefix[top][right + 1]
-                                - prefix[bottom + 1][left]
-                                + prefix[top][left];
+                // Now find subarrays with sum = target
+                unordered_map<int, int> mp;
 
-                        if (sum == target)
-                            count++;
+                mp[0] = 1;
+
+                int prefixSum = 0;
+
+                for (int col = 0; col < n; col++) {
+
+                    prefixSum += colSum[col];
+
+                    int needed = prefixSum - target;
+
+                    if (mp.count(needed)) {
+                        ans += mp[needed];
                     }
+
+                    mp[prefixSum]++;
                 }
             }
         }
 
-        return count;
+        return ans;
     }
 };
