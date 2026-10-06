@@ -6,16 +6,20 @@ public:
         if(m==0) return;
 
         int n=matrix[0].size();
-        vector<vector<int>>original=matrix;
+        vector<bool>zr(m,false);
+        vector<bool>zc(n,false);
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
-                if(original[i][j]==0){
-                    for(int x=0;x<n;x++){
-                        matrix[i][x]=0;
-                    }
-                    for(int y=0;y<m;y++){
-                        matrix[y][j]=0;
-                    }
+                if(matrix[i][j]==0){
+                    zr[i]=true;
+                    zc[j]=true;
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(zr[i] || zc[j]){
+                    matrix[i][j]=0;
                 }
             }
         }
